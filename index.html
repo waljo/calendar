@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Schedule Coordinator</title>
+    <title>Calendário da Família</title>
     <style>
         * {
             margin: 0;
@@ -557,14 +557,14 @@
 
 
         <div class="tabs">
-            <div class="tab active" onclick="showTab('mom')">Mom's Night Shifts</div>
-            <div class="tab" onclick="showTab('kids')">Kids' Car Rides</div>
-            <div class="tab" onclick="showTab('calendar')">Dad's View</div>
+            <div class="tab active" onclick="showTab('mom')">Plantões Déa</div>
+            <div class="tab" onclick="showTab('kids')">Transporte meninas</div>
+            <div class="tab" onclick="showTab('calendar')">Calendário</div>
         </div>
 
         <div id="mom-tab" class="tab-content active">
             <div class="schedule-input">
-                <h3>🌙 Add Mom's Night Shift</h3>
+                <h3>🌙 Add plantão Déa</h3>
                 <div class="input-group">
                     <label for="shift-date">Date:</label>
                     <input type="date" id="shift-date">
@@ -585,7 +585,7 @@
             </div>
             
             <div class="schedule-list">
-                <h4>📋 Current Night Shifts</h4>
+                <h4>📋 Plantões Déa</h4>
                 <div id="night-shift-list">
                     <!-- Night shifts will be listed here -->
                 </div>
@@ -594,7 +594,7 @@
 
         <div id="kids-tab" class="tab-content">
             <div class="schedule-input">
-                <h3>🚗 Add Kids' Car Ride</h3>
+                <h3>🚗 Add Transporte meninas</h3>
                 <div class="input-group">
                     <label for="ride-date">Date:</label>
                     <input type="date" id="ride-date">
@@ -619,16 +619,16 @@
                 <div class="input-group">
                     <label for="ride-type">Type:</label>
                     <select id="ride-type">
-                        <option value="pickup">Pickup</option>
-                        <option value="dropoff">Drop-off</option>
-                        <option value="both">Both ways</option>
+                        <option value="pickup">Pegar</option>
+                        <option value="dropoff">Levar</option>
+                        <option value="both">Levar&Pegar</option>
                     </select>
                 </div>
-                <button class="btn" onclick="addCarRide()">Add Car Ride</button>
+                <button class="btn" onclick="addCarRide()">Add transporte</button>
             </div>
             
             <div class="schedule-list">
-                <h4>📋 Current Car Rides</h4>
+                <h4>📋 Transportes</h4>
                 <div id="car-ride-list">
                     <!-- Car rides will be listed here -->
                 </div>
