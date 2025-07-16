@@ -35,6 +35,48 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .google-sheets-setup {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .google-sheets-setup h3 {
+            color: #155724;
+            margin-bottom: 15px;
+        }
+
+        .google-sheets-setup ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .google-sheets-setup li {
+            margin-bottom: 5px;
+            color: #155724;
+        }
+
+        .connection-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .connection-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .connection-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
         .tabs {
             display: flex;
             margin-bottom: 30px;
@@ -275,19 +317,6 @@
             border-radius: 4px;
         }
 
-        .google-calendar-note {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        .google-calendar-note h3 {
-            color: #1976d2;
-            margin-bottom: 10px;
-        }
-
         .time-input {
             display: flex;
             gap: 10px;
@@ -423,7 +452,7 @@
                 margin-bottom: 15px;
             }
             
-            .google-calendar-note {
+            .google-sheets-setup {
                 padding: 10px;
                 font-size: 14px;
             }
@@ -554,7 +583,22 @@
     <div class="container">
         <h1>👨‍👩‍👧‍👦 Calendário da Família</h1>
         
-
+        <div class="google-sheets-setup">
+            <h3>📊 Configuração Google Sheets</h3>
+            <p><strong>Instruções de Configuração:</strong></p>
+            <ol>
+                <li>Crie uma nova planilha no Google Sheets</li>
+                <li>Compartilhe com "Qualquer pessoa com o link pode editar"</li>
+                <li>Copie o ID da planilha da URL</li>
+                <li>Cole abaixo e clique em "Conectar"</li>
+            </ol>
+            <div class="input-group">
+                <label for="sheet-id">ID da Planilha Google:</label>
+                <input type="text" id="sheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
+                <button class="btn" onclick="connectGoogleSheet()" style="margin-top: 10px;">Conectar à Planilha</button>
+            </div>
+            <div id="connection-status" class="connection-status" style="display: none;"></div>
+        </div>
 
         <div class="tabs">
             <div class="tab active" onclick="showTab('mom')">Plantões Déa</div>
@@ -564,28 +608,28 @@
 
         <div id="mom-tab" class="tab-content active">
             <div class="schedule-input">
-                <h3>🌙 Add plantão Déa</h3>
+                <h3>🌙 Adicionar plantão Déa</h3>
                 <div class="input-group">
-                    <label for="shift-date">Date:</label>
+                    <label for="shift-date">Data:</label>
                     <input type="date" id="shift-date">
                 </div>
                 <div class="input-group">
-                    <label for="shift-time">Time:</label>
+                    <label for="shift-time">Horário:</label>
                     <div class="time-input">
-                        <input type="time" id="shift-start" placeholder="Start">
-                        <span>to</span>
-                        <input type="time" id="shift-end" placeholder="End">
+                        <input type="time" id="shift-start" placeholder="Início">
+                        <span>até</span>
+                        <input type="time" id="shift-end" placeholder="Fim">
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="shift-notes">Notes:</label>
-                    <textarea id="shift-notes" rows="3" placeholder="Hospital, department, special instructions..."></textarea>
+                    <label for="shift-notes">Observações:</label>
+                    <textarea id="shift-notes" rows="3" placeholder="Hospital, setor, instruções especiais..."></textarea>
                 </div>
-                <button class="btn" onclick="addNightShift()">Add Night Shift</button>
+                <button class="btn" onclick="addNightShift()">Adicionar Plantão</button>
             </div>
             
             <div class="schedule-list">
-                <h4>📋 Plantões Déa</h4>
+                <h4>📋 Plantões da Déa</h4>
                 <div id="night-shift-list">
                     <!-- Night shifts will be listed here -->
                 </div>
@@ -594,36 +638,36 @@
 
         <div id="kids-tab" class="tab-content">
             <div class="schedule-input">
-                <h3>🚗 Add Transporte meninas</h3>
+                <h3>🚗 Adicionar Transporte das meninas</h3>
                 <div class="input-group">
-                    <label for="ride-date">Date:</label>
+                    <label for="ride-date">Data:</label>
                     <input type="date" id="ride-date">
                 </div>
                 <div class="input-group">
-                    <label for="ride-time">Time:</label>
+                    <label for="ride-time">Horário:</label>
                     <input type="time" id="ride-time">
                 </div>
                 <div class="input-group">
-                    <label for="ride-child">Child:</label>
+                    <label for="ride-child">Filha:</label>
                     <select id="ride-child">
-                        <option value="">Select child</option>
-                        <option value="Child 1">Júlia</option>
-                        <option value="Child 2">Luiza</option>                        
+                        <option value="">Selecionar filha</option>
+                        <option value="Júlia">Júlia</option>
+                        <option value="Luiza">Luiza</option>                        
                     </select>
                 </div>
                 <div class="input-group">
-                    <label for="ride-destination">Destination:</label>
-                    <input type="text" id="ride-destination" placeholder="School, practice, friend's house...">
+                    <label for="ride-destination">Destino:</label>
+                    <input type="text" id="ride-destination" placeholder="Escola, treino, casa de amiga...">
                 </div>
                 <div class="input-group">
-                    <label for="ride-type">Type:</label>
+                    <label for="ride-type">Tipo:</label>
                     <select id="ride-type">
-                        <option value="pickup">Pegar</option>
+                        <option value="pickup">Buscar</option>
                         <option value="dropoff">Levar</option>
-                        <option value="both">Levar&Pegar</option>
+                        <option value="both">Levar & Buscar</option>
                     </select>
                 </div>
-                <button class="btn" onclick="addCarRide()">Add transporte</button>
+                <button class="btn" onclick="addCarRide()">Adicionar Transporte</button>
             </div>
             
             <div class="schedule-list">
@@ -637,9 +681,9 @@
         <div id="calendar-tab" class="tab-content">
             <div class="calendar-view">
                 <div class="calendar-header">
-                    <button class="btn" onclick="previousMonth()">← Previous</button>
-                    <h2 id="current-month">December 2024</h2>
-                    <button class="btn" onclick="nextMonth()">Next →</button>
+                    <button class="btn" onclick="previousMonth()">← Anterior</button>
+                    <h2 id="current-month">Dezembro 2024</h2>
+                    <button class="btn" onclick="nextMonth()">Próximo →</button>
                 </div>
                 <div class="calendar-grid" id="calendar-grid">
                     <!-- Calendar will be generated here -->
@@ -647,11 +691,11 @@
                 <div class="legend">
                     <div class="legend-item">
                         <div class="legend-color" style="background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);"></div>
-                        <span>Mom's Night Shift</span>
+                        <span>Plantão da Déa</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);"></div>
-                        <span>Kids' Car Ride</span>
+                        <span>Transporte das Meninas</span>
                     </div>
                 </div>
             </div>
@@ -664,18 +708,126 @@
             nightShifts: [],
             carRides: []
         };
+        let googleSheetId = null;
+        let isConnectedToSheet = false;
 
-        // Sample data with IDs for deletion
-        scheduleData.nightShifts = [
-            { id: 1, date: '2024-12-20', startTime: '22:00', endTime: '06:00', notes: 'Emergency Room' },
-            { id: 2, date: '2024-12-22', startTime: '23:00', endTime: '07:00', notes: 'ICU' }
-        ];
+        // Google Sheets API functions
+        async function connectGoogleSheet() {
+            const sheetId = document.getElementById('sheet-id').value.trim();
+            const statusDiv = document.getElementById('connection-status');
+            
+            if (!sheetId) {
+                showConnectionStatus('Por favor, insira o ID da planilha Google', 'error');
+                return;
+            }
+            
+            googleSheetId = sheetId;
+            
+            try {
+                // Test connection by trying to read data
+                await loadDataFromSheet();
+                
+                isConnectedToSheet = true;
+                showConnectionStatus('✅ Conectado com sucesso ao Google Sheets!', 'success');
+                
+                // Refresh all displays
+                updateNightShiftList();
+                updateCarRideList();
+                generateCalendar();
+                
+                // Save sheet ID to browser for future sessions
+                localStorage.setItem('familyScheduleSheetId', sheetId);
+                
+            } catch (error) {
+                console.error('Erro de conexão:', error);
+                showConnectionStatus('❌ Falha na conexão. Verifique se a planilha está compartilhada publicamente.', 'error');
+            }
+        }
 
-        scheduleData.carRides = [
-            { id: 1, date: '2024-12-21', time: '15:30', child: 'Child 1', destination: 'Soccer practice', type: 'dropoff' },
-            { id: 2, date: '2024-12-21', time: '17:00', child: 'Child 1', destination: 'Soccer practice', type: 'pickup' },
-            { id: 3, date: '2024-12-23', time: '08:00', child: 'Child 2', destination: 'School', type: 'dropoff' }
-        ];
+        async function loadDataFromSheet() {
+            try {
+                // Load night shifts from "Plantões" sheet
+                const nightShiftData = await getSheetData('Plantões!A2:E1000');
+                if (nightShiftData && nightShiftData.length > 0) {
+                    scheduleData.nightShifts = nightShiftData.map((row, index) => ({
+                        id: parseInt(row[0]) || (Date.now() + index),
+                        date: row[1] || '',
+                        startTime: row[2] || '',
+                        endTime: row[3] || '',
+                        notes: row[4] || ''
+                    })).filter(shift => shift.date);
+                }
+                
+                // Load car rides from "Transportes" sheet
+                const carRideData = await getSheetData('Transportes!A2:F1000');
+                if (carRideData && carRideData.length > 0) {
+                    scheduleData.carRides = carRideData.map((row, index) => ({
+                        id: parseInt(row[0]) || (Date.now() + index + 1000),
+                        date: row[1] || '',
+                        time: row[2] || '',
+                        child: row[3] || '',
+                        destination: row[4] || '',
+                        type: row[5] || ''
+                    })).filter(ride => ride.date);
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                // If sheets don't exist yet, start with empty data
+                scheduleData.nightShifts = [];
+                scheduleData.carRides = [];
+            }
+        }
+
+        async function getSheetData(range) {
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${googleSheetId}/gviz/tq?tqx=out:csv&range=${range}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error('Falha ao acessar a planilha');
+                }
+                
+                const text = await response.text();
+                
+                if (!text.trim()) {
+                    return [];
+                }
+                
+                // Parse CSV data
+                const rows = text.split('\n').map(row => {
+                    const result = [];
+                    let current = '';
+                    let inQuotes = false;
+                    
+                    for (let i = 0; i < row.length; i++) {
+                        const char = row[i];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            result.push(current.replace(/"/g, ''));
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    result.push(current.replace(/"/g, ''));
+                    return result;
+                });
+                
+                return rows.filter(row => row.some(cell => cell.trim()));
+            } catch (error) {
+                console.error('Erro ao ler planilha:', error);
+                return [];
+            }
+        }
+
+        function showConnectionStatus(message, type) {
+            const statusDiv = document.getElementById('connection-status');
+            statusDiv.textContent = message;
+            statusDiv.className = `connection-status ${type}`;
+            statusDiv.style.display = 'block';
+        }
 
         function showTab(tabName) {
             // Hide all tabs
@@ -707,7 +859,7 @@
 
             if (date && startTime && endTime) {
                 const newShift = {
-                    id: Date.now(), // Simple unique ID
+                    id: Date.now(),
                     date: date,
                     startTime: startTime,
                     endTime: endTime,
@@ -723,9 +875,12 @@
                 document.getElementById('shift-end').value = '';
                 document.getElementById('shift-notes').value = '';
 
-                alert('Night shift added successfully!');
+                alert('Plantão adicionado com sucesso!');
+                
+                // Save to local storage
+                saveToLocalStorage();
             } else {
-                alert('Please fill in all required fields.');
+                alert('Por favor, preencha todos os campos obrigatórios.');
             }
         }
 
@@ -738,7 +893,7 @@
 
             if (date && time && child && destination) {
                 const newRide = {
-                    id: Date.now(), // Simple unique ID
+                    id: Date.now(),
                     date: date,
                     time: time,
                     child: child,
@@ -756,16 +911,21 @@
                 document.getElementById('ride-destination').value = '';
                 document.getElementById('ride-type').value = 'pickup';
 
-                alert('Car ride added successfully!');
+                alert('Transporte adicionado com sucesso!');
+                
+                // Save to local storage
+                saveToLocalStorage();
             } else {
-                alert('Please fill in all required fields.');
+                alert('Por favor, preencha todos os campos obrigatórios.');
             }
         }
 
         function deleteNightShift(id) {
-            if (confirm('Are you sure you want to delete this night shift?')) {
+            if (confirm('Tem certeza que deseja excluir este plantão?')) {
                 scheduleData.nightShifts = scheduleData.nightShifts.filter(shift => shift.id !== id);
                 updateNightShiftList();
+                saveToLocalStorage();
+                
                 // Refresh calendar if currently viewing it
                 if (document.getElementById('calendar-tab').classList.contains('active')) {
                     generateCalendar();
@@ -774,9 +934,11 @@
         }
 
         function deleteCarRide(id) {
-            if (confirm('Are you sure you want to delete this car ride?')) {
+            if (confirm('Tem certeza que deseja excluir este transporte?')) {
                 scheduleData.carRides = scheduleData.carRides.filter(ride => ride.id !== id);
                 updateCarRideList();
+                saveToLocalStorage();
+                
                 // Refresh calendar if currently viewing it
                 if (document.getElementById('calendar-tab').classList.contains('active')) {
                     generateCalendar();
@@ -788,7 +950,7 @@
             const listContainer = document.getElementById('night-shift-list');
             
             if (scheduleData.nightShifts.length === 0) {
-                listContainer.innerHTML = '<div class="no-schedules">No night shifts scheduled</div>';
+                listContainer.innerHTML = '<div class="no-schedules">Nenhum plantão agendado</div>';
                 return;
             }
 
@@ -802,139 +964,3 @@
                         <div class="schedule-info">
                             🌙 ${shift.startTime} - ${shift.endTime}
                             ${shift.notes ? ` | ${shift.notes}` : ''}
-                        </div>
-                    </div>
-                    <button class="delete-btn" onclick="deleteNightShift(${shift.id})">Delete</button>
-                </div>
-            `).join('');
-        }
-
-        function updateCarRideList() {
-            const listContainer = document.getElementById('car-ride-list');
-            
-            if (scheduleData.carRides.length === 0) {
-                listContainer.innerHTML = '<div class="no-schedules">No car rides scheduled</div>';
-                return;
-            }
-
-            // Sort by date and time
-            const sortedRides = scheduleData.carRides.sort((a, b) => {
-                const dateCompare = new Date(a.date) - new Date(b.date);
-                if (dateCompare === 0) {
-                    return a.time.localeCompare(b.time);
-                }
-                return dateCompare;
-            });
-            
-            listContainer.innerHTML = sortedRides.map(ride => `
-                <div class="schedule-list-item car-ride">
-                    <div class="schedule-details">
-                        <div class="schedule-date">${formatDate(ride.date)}</div>
-                        <div class="schedule-info">
-                            🚗 ${ride.time} | ${ride.child} | ${ride.destination} | ${ride.type}
-                        </div>
-                    </div>
-                    <button class="delete-btn" onclick="deleteCarRide(${ride.id})">Delete</button>
-                </div>
-            `).join('');
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric',
-                year: 'numeric'
-            });
-        }
-
-        function generateCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            
-            // Update month header
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
-
-            // Clear calendar
-            const calendarGrid = document.getElementById('calendar-grid');
-            calendarGrid.innerHTML = '';
-
-            // Add day headers
-            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            dayHeaders.forEach(day => {
-                const dayHeader = document.createElement('div');
-                dayHeader.classList.add('day-header');
-                dayHeader.textContent = day;
-                calendarGrid.appendChild(dayHeader);
-            });
-
-            // Get first day of month and days in month
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            // Add empty cells for days before first day of month
-            for (let i = 0; i < firstDay; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.classList.add('day-cell');
-                calendarGrid.appendChild(emptyCell);
-            }
-
-            // Add days of month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayCell = document.createElement('div');
-                dayCell.classList.add('day-cell');
-                
-                const dayNumber = document.createElement('div');
-                dayNumber.classList.add('day-number');
-                dayNumber.textContent = day;
-                dayCell.appendChild(dayNumber);
-
-                // Format date for comparison
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-                // Add night shifts
-                scheduleData.nightShifts.forEach(shift => {
-                    if (shift.date === dateStr) {
-                        const shiftItem = document.createElement('div');
-                        shiftItem.classList.add('schedule-item', 'night-shift');
-                        shiftItem.textContent = `🌙 ${shift.startTime}-${shift.endTime}`;
-                        dayCell.appendChild(shiftItem);
-                    }
-                });
-
-                // Add car rides
-                scheduleData.carRides.forEach(ride => {
-                    if (ride.date === dateStr) {
-                        const rideItem = document.createElement('div');
-                        rideItem.classList.add('schedule-item', 'car-ride');
-                        rideItem.textContent = `🚗 ${ride.time} ${ride.child}`;
-                        dayCell.appendChild(rideItem);
-                    }
-                });
-
-                calendarGrid.appendChild(dayCell);
-            }
-        }
-
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar();
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar();
-        }
-
-        // Initialize calendar and lists on page load
-        window.onload = function() {
-            generateCalendar();
-            updateNightShiftList();
-            updateCarRideList();
-        };
-    </script>
-</body>
-</html>
