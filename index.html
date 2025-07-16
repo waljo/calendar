@@ -180,6 +180,81 @@
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
         }
 
+        .schedule-list {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .schedule-list h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 8px;
+        }
+
+        .schedule-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #6c757d;
+        }
+
+        .schedule-list-item.night-shift {
+            border-left-color: #6f42c1;
+        }
+
+        .schedule-list-item.car-ride {
+            border-left-color: #28a745;
+        }
+
+        .schedule-details {
+            flex: 1;
+        }
+
+        .schedule-date {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .schedule-info {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        .no-schedules {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px;
+        }
+
         .legend {
             display: flex;
             justify-content: center;
@@ -508,6 +583,13 @@
                 </div>
                 <button class="btn" onclick="addNightShift()">Add Night Shift</button>
             </div>
+            
+            <div class="schedule-list">
+                <h4>📋 Current Night Shifts</h4>
+                <div id="night-shift-list">
+                    <!-- Night shifts will be listed here -->
+                </div>
+            </div>
         </div>
 
         <div id="kids-tab" class="tab-content">
@@ -544,6 +626,13 @@
                 </div>
                 <button class="btn" onclick="addCarRide()">Add Car Ride</button>
             </div>
+            
+            <div class="schedule-list">
+                <h4>📋 Current Car Rides</h4>
+                <div id="car-ride-list">
+                    <!-- Car rides will be listed here -->
+                </div>
+            </div>
         </div>
 
         <div id="calendar-tab" class="tab-content">
@@ -577,16 +666,16 @@
             carRides: []
         };
 
-        // Sample data
+        // Sample data with IDs for deletion
         scheduleData.nightShifts = [
-            { date: '2024-12-20', startTime: '22:00', endTime: '06:00', notes: 'Emergency Room' },
-            { date: '2024-12-22', startTime: '23:00', endTime: '07:00', notes: 'ICU' }
+            { id: 1, date: '2024-12-20', startTime: '22:00', endTime: '06:00', notes: 'Emergency Room' },
+            { id: 2, date: '2024-12-22', startTime: '23:00', endTime: '07:00', notes: 'ICU' }
         ];
 
         scheduleData.carRides = [
-            { date: '2024-12-21', time: '15:30', child: 'Child 1', destination: 'Soccer practice', type: 'dropoff' },
-            { date: '2024-12-21', time: '17:00', child: 'Child 1', destination: 'Soccer practice', type: 'pickup' },
-            { date: '2024-12-23', time: '08:00', child: 'Child 2', destination: 'School', type: 'dropoff' }
+            { id: 1, date: '2024-12-21', time: '15:30', child: 'Child 1', destination: 'Soccer practice', type: 'dropoff' },
+            { id: 2, date: '2024-12-21', time: '17:00', child: 'Child 1', destination: 'Soccer practice', type: 'pickup' },
+            { id: 3, date: '2024-12-23', time: '08:00', child: 'Child 2', destination: 'School', type: 'dropoff' }
         ];
 
         function showTab(tabName) {
@@ -604,6 +693,10 @@
 
             if (tabName === 'calendar') {
                 generateCalendar();
+            } else if (tabName === 'mom') {
+                updateNightShiftList();
+            } else if (tabName === 'kids') {
+                updateCarRideList();
             }
         }
 
@@ -614,12 +707,16 @@
             const notes = document.getElementById('shift-notes').value;
 
             if (date && startTime && endTime) {
-                scheduleData.nightShifts.push({
+                const newShift = {
+                    id: Date.now(), // Simple unique ID
                     date: date,
                     startTime: startTime,
                     endTime: endTime,
                     notes: notes
-                });
+                };
+                
+                scheduleData.nightShifts.push(newShift);
+                updateNightShiftList();
 
                 // Clear form
                 document.getElementById('shift-date').value = '';
@@ -641,13 +738,17 @@
             const type = document.getElementById('ride-type').value;
 
             if (date && time && child && destination) {
-                scheduleData.carRides.push({
+                const newRide = {
+                    id: Date.now(), // Simple unique ID
                     date: date,
                     time: time,
                     child: child,
                     destination: destination,
                     type: type
-                });
+                };
+                
+                scheduleData.carRides.push(newRide);
+                updateCarRideList();
 
                 // Clear form
                 document.getElementById('ride-date').value = '';
@@ -660,6 +761,93 @@
             } else {
                 alert('Please fill in all required fields.');
             }
+        }
+
+        function deleteNightShift(id) {
+            if (confirm('Are you sure you want to delete this night shift?')) {
+                scheduleData.nightShifts = scheduleData.nightShifts.filter(shift => shift.id !== id);
+                updateNightShiftList();
+                // Refresh calendar if currently viewing it
+                if (document.getElementById('calendar-tab').classList.contains('active')) {
+                    generateCalendar();
+                }
+            }
+        }
+
+        function deleteCarRide(id) {
+            if (confirm('Are you sure you want to delete this car ride?')) {
+                scheduleData.carRides = scheduleData.carRides.filter(ride => ride.id !== id);
+                updateCarRideList();
+                // Refresh calendar if currently viewing it
+                if (document.getElementById('calendar-tab').classList.contains('active')) {
+                    generateCalendar();
+                }
+            }
+        }
+
+        function updateNightShiftList() {
+            const listContainer = document.getElementById('night-shift-list');
+            
+            if (scheduleData.nightShifts.length === 0) {
+                listContainer.innerHTML = '<div class="no-schedules">No night shifts scheduled</div>';
+                return;
+            }
+
+            // Sort by date
+            const sortedShifts = scheduleData.nightShifts.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            listContainer.innerHTML = sortedShifts.map(shift => `
+                <div class="schedule-list-item night-shift">
+                    <div class="schedule-details">
+                        <div class="schedule-date">${formatDate(shift.date)}</div>
+                        <div class="schedule-info">
+                            🌙 ${shift.startTime} - ${shift.endTime}
+                            ${shift.notes ? ` | ${shift.notes}` : ''}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteNightShift(${shift.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function updateCarRideList() {
+            const listContainer = document.getElementById('car-ride-list');
+            
+            if (scheduleData.carRides.length === 0) {
+                listContainer.innerHTML = '<div class="no-schedules">No car rides scheduled</div>';
+                return;
+            }
+
+            // Sort by date and time
+            const sortedRides = scheduleData.carRides.sort((a, b) => {
+                const dateCompare = new Date(a.date) - new Date(b.date);
+                if (dateCompare === 0) {
+                    return a.time.localeCompare(b.time);
+                }
+                return dateCompare;
+            });
+            
+            listContainer.innerHTML = sortedRides.map(ride => `
+                <div class="schedule-list-item car-ride">
+                    <div class="schedule-details">
+                        <div class="schedule-date">${formatDate(ride.date)}</div>
+                        <div class="schedule-info">
+                            🚗 ${ride.time} | ${ride.child} | ${ride.destination} | ${ride.type}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteCarRide(${ride.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'short', 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            });
         }
 
         function generateCalendar() {
@@ -742,9 +930,11 @@
             generateCalendar();
         }
 
-        // Initialize calendar on page load
+        // Initialize calendar and lists on page load
         window.onload = function() {
             generateCalendar();
+            updateNightShiftList();
+            updateCarRideList();
         };
     </script>
 </body>
